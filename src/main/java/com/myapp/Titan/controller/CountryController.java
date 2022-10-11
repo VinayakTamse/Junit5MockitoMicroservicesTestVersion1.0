@@ -16,15 +16,19 @@ public class CountryController {
 
     @Autowired
     CountryService serv;
-
-    @Autowired
-    CountryRepository repo;
-
     @GetMapping("/all")
     @CrossOrigin(origins = "http://localhost:3000")
-    public List<Country> getAllCountries()
+    public ResponseEntity<List<Country>> getAllCountries()
     {
-       return serv.getCountries();
+       try {
+           List<Country> lists =  serv.getCountries();
+           return new ResponseEntity<List<Country>>(lists, HttpStatus.OK);
+       }
+       catch (Exception e)
+       {
+           return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+       }
+
     }
 
 
@@ -59,7 +63,7 @@ public class CountryController {
     public ResponseEntity<Country> updateCountry(@PathVariable(value="id") int id, @RequestBody Country country)
     {
         try {
-            Country existingCountry = repo.findById(id).get();
+            Country existingCountry = serv.getCountryById(id);
             existingCountry.setName(country.getName());
             existingCountry.setCapital(country.getCapital());
             Country newCountry = serv.updateCountry(existingCountry);

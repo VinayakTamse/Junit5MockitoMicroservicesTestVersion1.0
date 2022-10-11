@@ -32,7 +32,6 @@ public class CountryServiceMockitoTest {
     @Order(1)
     public void test_getCountries()
     {
-
         when(countryRepo.findAll()).thenReturn(MockData.listsOfCountries());
        List<Country> lists = countryServ.getCountries();
        assertEquals(2, lists.size());
